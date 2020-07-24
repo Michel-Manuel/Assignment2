@@ -1,119 +1,104 @@
-from numpy import random #This module would be used for all random number generations
+class Deque():
+    def __init__(self):
+        
+        self.items=[]
+        
 
-
-import datetime #This module would be used to calculate the time fot execution  
-
-
-"""This next block of code recieves the sizes of the arrays going to be used for the program"""
-N= int(input("Size of array: ")) 
-N2 = int(input("Second Size of array: "))
-N3 = int(input("Third Size of array: "))
-
-
-BinaryTime=[]
-InterpolationTime=[]
-myList =[]
-
-for i in range(N):
-    value =random.randint(1,32767)
-    myList.append(value)
-myList.sort()
-for i in range(N2):
-    value =random.randint(1,32767)
-    myList.append(value)
-myList.sort()
-for i in range(N3):
-    value =random.randint(1,32767)
-    myList.append(value)
-myList.sort()
-start_time = datetime.datetime.now()
-
-#This function find an element/number in an array using the interpolationsearch method
-def InterpolationSearch(array, low, high, target):
-    
-    low=0
-    
-    position = (low + (( (high - low) * (target - array[low])) // (array[high] - array[low])))
-    while target != array[position] :
-        if array[position] < target :
-            high = position - 1
-            
-            position = (low + (( (high - low) * (target - array[low])) // (array[high] - array[low])) )
+    def isEmpty(self):
+        if self.items == [] :
+        
+            return True
         else :
-            low = position +1
-            position = (low + (( (high - low) * (target - array[low])) // (array[high] - array[low])))          
-    
-    
+            return False 
+
+    def addFront(self,item):
+        self.items.append(item)
+        return self.items
+        
+    def addRear(self,item):
+        self.items.insert(0,item)
+        return self.items
+
+    def removeFront(self):
+        self.items.pop()
+        return self.items
+
+    def removeRear(self):
+        self.items.pop(0)
+        return self.items
 
 
-    end_time = datetime.datetime.now()
-    time_diff = (end_time - start_time)*1000#Calculates the exucution time of this function 
+"""
+The next set of code would keep removing and adding random numbers to the deque , based on a a random probabilty  generator,
+till the length of the Deque gets to 20 
+"""
+from numpy import random
+x= random.randint(100, size =(20))
+
+print("Original Deque: ", x)
+middle = len(x)//2
+half = x[:middle]
+x = list(half)
+print("Instance of half-full Deque: " , x)
+myDeque = Deque()
+
+for i in range(len(x)):
+    myDeque.addFront(i)
+
+
+while len(x) != 20 :
+    randomValue =round(random.uniform(0,1),1)
+    print("Random Value: ", randomValue)
     
-    print("Time used for Interpolation Search", time_diff.total_seconds() )
-    InterpolationTime.append( time_diff.total_seconds())      
+    if myDeque.isEmpty()== True :
+        myDeque.addFront(randomValue)
+        
+    elif len(x) == 0:
+        x.append(randomValue)   
+
+    
+        
+    elif 0 < randomValue <= 0.1 :
+        myDeque.addFront(randomValue)
+        x.append(randomValue)
+
+    elif 0.1 < randomValue <= 0.3:
+        myDeque.removeFront()
+        x.pop()
+        
         
 
-start_time = datetime.datetime.now()
+    elif  0.3 < randomValue <= 0.4:
+        myDeque.removeRear()
+        
+        
+        x.pop(0)
+        
+        
+    elif 0.4 < randomValue <= 1:
+        
+        x.insert(0,randomValue)
+        myDeque.addRear(randomValue)
+        
+        
+print(myDeque)
+print(x)
+        
 
-#This function find an element/number in an array using the Binary Search method
-def BinarySearch(arr, low, high, target):
+
+
+
+
+
+
     
-  
-    
-    if high >= low: 
-  
-        mid = (high + low) // 2
-  
-       
-        if arr[mid] == target:
-            end_time = datetime.datetime.now()
-            time_diff = (end_time - start_time) *1000#Calculates the exucution time of this function 
-            
-            print("Time used for Binary Search", time_diff.total_seconds() ) 
-            BinaryTime.append(time_diff.total_seconds())
-            
-  
+
          
-        elif arr[mid] > target: 
-            return BinarySearch(arr, low, mid - 1, target) 
-  
-        # Else the element can only be present in right subarray 
-        else: 
-            return BinarySearch(arr, mid + 1, high, target)   
-
-
         
         
-   
+        
+        
 
-
-target=random.choice(myList)
-print(target)
-BinarySearch(myList, 0, len(myList)-1, target)
-InterpolationSearch(myList, 0, len(myList)-1, target)
-
-TotalBinaryTime = sum(BinaryTime)/len(BinaryTime)
-TotalInterpolationTime = sum(InterpolationTime)/len(InterpolationTime)
-print("Average Binary Time", TotalBinaryTime)
-print("Average Interpolation Time",TotalInterpolationTime)
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
 
 
 
@@ -121,4 +106,4 @@ print("Average Interpolation Time",TotalInterpolationTime)
 
 
 
-
+ 
